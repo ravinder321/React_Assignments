@@ -25,14 +25,32 @@ function ProductAssignmentUI() {
   const [products, setProducts] = useState(initialProducts);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
+  let filteredProducts = [];
   const categoryChangeHandler = (e) => {
-    const filteredProducts = [];
+    
     for (const product of initialProducts) {
       if (product.category === e.target.value || e.target.value === "All") {
         filteredProducts.push(product);
       }
     }
+    
     setCategory(e.target.value);
+    setProducts(filteredProducts);
+  };
+
+  const handleSearch = (e) => {
+    
+    if(filteredProducts.length > 0) {
+      filteredProducts = filteredProducts.filter(
+        (product) => product.name.toLowerCase().includes(e.target.value.toLowerCase())
+      );
+    }
+    else {
+      filteredProducts = initialProducts.filter(
+        (product) => product.name.toLowerCase().includes(e.target.value.toLowerCase())
+      );
+    }
+    setSearch(e.target.value);
     setProducts(filteredProducts);
   };
 
@@ -45,7 +63,7 @@ function ProductAssignmentUI() {
         type="text"
         placeholder="Search by product name..."
         value={search}
-        onChange={(e) => setSearch(e.target.value)}
+        onChange={handleSearch}
         style={{
           width: "100%",
           padding: "8px",
